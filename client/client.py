@@ -2,7 +2,6 @@ import socket
 import sys
 
 import cv2
-import numpy as np
 import pygame
 from pygame.locals import *
 
@@ -14,7 +13,7 @@ class App:
     def __init__(self):
         pygame.init()
         pygame.display.set_caption("RC Car Control App")
-        self.screen = pygame.display.set_mode((1280, 720))
+        self.screen = pygame.display.set_mode((960, 720))
         self.clock = pygame.time.Clock()
         self.fps = 30
 
@@ -45,20 +44,22 @@ class App:
             if keys[K_LEFT]:
                 turn_motor -= 30
 
+            drive_cmd = ("F" if drive_motor > 0 else "B") + str(-drive_motor)
+            turn_cmd = "T" + str(turn_motor)
+            cmd = drive_cmd + " " + turn_cmd
+
+            sock.sendto(cmd.encode("utf-8"), ("192.168.1.103", 8080))
+
             ret, frame = cap.read()
             if not ret:
+                print("Error: No frame found")
                 break
 
-            drive_cmd = ("F" if drive_motor > 0 else "B") + str(drive_motor)
-            turn_cmd = "T" + str(turn_motor)
-
-            sock.sendto(drive_cmd.encode("utf-8"), ("192.168.1.103", 8080))
-            sock.sendto(turn_cmd.encode("utf-8"), ("192.168.1.103", 8080))
-
             frame_to_surface = pygame.surfarray.make_surface(frame)
-            pygame.transform.scale(frame_to_surface, (1280, 720), self.screen)
+            pygame.transform.scale(frame_to_surface, (960, 720), self.screen)
 
             pygame.display.flip()
+            self.clock.tick(self.fps)
 
         sock.sendto("S".encode("utf-8"), ("192.168.1.103", 8080))
         self.quit()

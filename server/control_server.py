@@ -15,7 +15,9 @@ def main():
 
     while True:
         data, addr = sock.recvfrom(1024)
-        ser.write(data)
+        cmds = data.split()
+        for cmd in cmds:
+            ser.write(cmd)
 
 
 if __name__ == "__main__":

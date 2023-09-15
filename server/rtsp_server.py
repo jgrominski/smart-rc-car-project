@@ -5,9 +5,9 @@ gi.require_version('Gst', '1.0')
 gi.require_version('GstRtspServer', '1.0')
 from gi.repository import GLib, Gst, GstRtspServer
 
-DEVICE_ID = 1
+DEVICE_ID = 0
 FPS = 30
-IMAGE_WIDTH = 640
+IMAGE_WIDTH = 480
 IMAGE_HEIGHT = 360
 PORT = 8000
 
