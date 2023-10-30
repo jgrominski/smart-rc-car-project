@@ -11,7 +11,7 @@ def main():
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    sock.bind(("192.168.1.103", 8080))
+    sock.bind(("", 8080))
 
     while True:
         data, addr = sock.recvfrom(1024)

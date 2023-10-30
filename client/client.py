@@ -5,8 +5,8 @@ import cv2
 import pygame
 from pygame.locals import *
 
-RTSP_URL = "rtsp://192.168.1.103:8000/stream"
-
+RTSP_URL = f"rtsp://{sys.argv[1]}:8000/stream"
+print(RTSP_URL)
 
 class App:
 
@@ -48,7 +48,7 @@ class App:
             turn_cmd = "T" + str(turn_motor)
             cmd = drive_cmd + " " + turn_cmd
 
-            sock.sendto(cmd.encode("utf-8"), ("192.168.1.103", 8080))
+            sock.sendto(cmd.encode("utf-8"), ("192.168.0.101", 8080))
 
             ret, frame = cap.read()
             if not ret:
@@ -61,7 +61,7 @@ class App:
             pygame.display.flip()
             self.clock.tick(self.fps)
 
-        sock.sendto("S".encode("utf-8"), ("192.168.1.103", 8080))
+        sock.sendto("S".encode("utf-8"), (sys.argv[1], 8080))
         self.quit()
 
     def quit(self):
